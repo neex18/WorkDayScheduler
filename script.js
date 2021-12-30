@@ -1,17 +1,13 @@
+// moment.js tools
 let todayDate = moment().format('dddd, MMM Do YYYY ')
 let currentDayStart = moment().startOf('day');
-let start = moment().startOf('hour')
+let startHour = moment().startOf('hour')
 
-//dom selection
 let container = $('.container');
-
-//var creation
 let savedEvents = Array(9)
 
 function timeblockCreation() {
-    //timeblock creation loop
     for (let i = 9; i < 18; i++) {
-        //dom creation and manipulation
         var timeblockHour = moment().startOf('day').hour(i)
         var hourFormat = moment(timeblockHour).format('h:mm a')
         var divElRow = $('<div>');
@@ -25,7 +21,6 @@ function timeblockCreation() {
         divElText.addClass('col-9 description')
         divElSave.addClass('col-1 saveBtn');
 
-        //div formatting for past present future
         if (startHour.isAfter(timeblockHour)) {
             divElRow.addClass('past')
             divElText.prop('readonly', true);
@@ -35,7 +30,6 @@ function timeblockCreation() {
             divElRow.addClass('future')
         }
 
-        //dom appending
         container.append(divElRow);
         divElRow.append(divElHour);
         divElRow.append(divElText);
@@ -55,18 +49,16 @@ function loadEntries() {
 }
 
 function saveEntry() {
-    //index is determined by data hour, since the 
     var arrIndexJSON = ($('.container').children()).index($(this).parent())
-    //grab value of textarea
     let eventDetail = $(this).parent().children('textarea');
     eventDetail = eventDetail.val();
     savedEvents[arrIndexJSON - 1] = eventDetail;
+    // make savedEvents a string
     localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
     $('.toast').toast('show');
 }
 
-
-//set day
+// Initialize day
 $('#currentDay').text(todayDate);
 timeblockCreation();
 loadEntries();
